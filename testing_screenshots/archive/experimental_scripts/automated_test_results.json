@@ -1,0 +1,58 @@
+{
+  "test_run_time": "2025-06-28T00:37:23.486682",
+  "app_url": "http://localhost:8503",
+  "total_tests": 5,
+  "results": [
+    {
+      "timestamp": "2025-06-28T00:37:21.389861",
+      "test": "App Health",
+      "status": "PASS",
+      "message": "Application responding normally",
+      "details": {}
+    },
+    {
+      "timestamp": "2025-06-28T00:37:21.392303",
+      "test": "Main Page Load",
+      "status": "FAIL",
+      "message": "Page loaded but missing key elements (1/4 checks passed)",
+      "details": {
+        "title": false,
+        "navigation": false,
+        "streamlit": true,
+        "multipage": false
+      }
+    },
+    {
+      "timestamp": "2025-06-28T00:37:23.482501",
+      "test": "Data File Check",
+      "status": "PASS",
+      "message": "Lab data file found and readable (2459 rows, 167 columns)",
+      "details": {}
+    },
+    {
+      "timestamp": "2025-06-28T00:37:23.484645",
+      "test": "Streamlit Features",
+      "status": "WARN",
+      "message": "Limited Streamlit functionality detected (1/4 indicators)",
+      "details": {
+        "sidebar": false,
+        "widgets": false,
+        "layout": false,
+        "components": true
+      }
+    },
+    {
+      "timestamp": "2025-06-28T00:37:23.485964",
+      "test": "Application Features",
+      "status": "WARN",
+      "message": "Application features detected (0/5)",
+      "details": {
+        "data_upload": false,
+        "analysis_tools": false,
+        "plotting": false,
+        "navigation_pages": false,
+        "geotechnical": false
+      }
+    }
+  ]
+}

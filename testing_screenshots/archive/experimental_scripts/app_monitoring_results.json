@@ -1,0 +1,95 @@
+{
+  "monitoring_time": "2025-06-28T00:39:10.520834",
+  "app_url": "http://localhost:8503",
+  "total_checks": 10,
+  "log_entries": [
+    {
+      "timestamp": "00:38:40",
+      "action": "Health Check",
+      "status": "SUCCESS",
+      "details": {
+        "status_code": 200
+      }
+    },
+    {
+      "timestamp": "00:38:40",
+      "action": "Page Analysis",
+      "status": "SUCCESS",
+      "details": {
+        "detected_features": "0/10",
+        "multipage_active": false,
+        "navigation_present": false,
+        "upload_available": false,
+        "errors_detected": false
+      }
+    },
+    {
+      "timestamp": "00:38:40",
+      "action": "Log Analysis",
+      "status": "SUCCESS",
+      "details": {
+        "errors_found": 0,
+        "warnings_found": 0,
+        "recent_errors": [],
+        "log_file_size": 13
+      }
+    },
+    {
+      "timestamp": "00:38:45",
+      "action": "Health Check",
+      "status": "SUCCESS",
+      "details": {
+        "status_code": 200
+      }
+    },
+    {
+      "timestamp": "00:38:50",
+      "action": "Health Check",
+      "status": "SUCCESS",
+      "details": {
+        "status_code": 200
+      }
+    },
+    {
+      "timestamp": "00:38:55",
+      "action": "Health Check",
+      "status": "SUCCESS",
+      "details": {
+        "status_code": 200
+      }
+    },
+    {
+      "timestamp": "00:39:00",
+      "action": "Health Check",
+      "status": "SUCCESS",
+      "details": {
+        "status_code": 200
+      }
+    },
+    {
+      "timestamp": "00:39:05",
+      "action": "Health Check",
+      "status": "SUCCESS",
+      "details": {
+        "status_code": 200
+      }
+    },
+    {
+      "timestamp": "00:39:10",
+      "action": "Health Check",
+      "status": "SUCCESS",
+      "details": {
+        "status_code": 200
+      }
+    },
+    {
+      "timestamp": "00:39:10",
+      "action": "Stability Test",
+      "status": "SUCCESS",
+      "details": {
+        "stability_rate": "100.0%",
+        "successful_checks": "6/6"
+      }
+    }
+  ]
+}

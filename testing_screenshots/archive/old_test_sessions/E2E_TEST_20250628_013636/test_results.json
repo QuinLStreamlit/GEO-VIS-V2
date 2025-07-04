@@ -1,0 +1,199 @@
+{
+  "test_name": "GEOTECHNICAL_ANALYSIS_TOOL_COMPLETE_FUNCTIONAL_VERIFICATION",
+  "test_version": "v1.0",
+  "timestamp": "20250628_013636",
+  "start_time": "2025-06-28T01:36:36.368199",
+  "end_time": "2025-06-28T01:36:46.929261",
+  "duration_minutes": 0.17601771666666668,
+  "app_url": "http://localhost:8503",
+  "test_data_file": "Lab_summary_final.xlsx",
+  "statistics": {
+    "total_operations": 25,
+    "successful_operations": 2,
+    "failed_operations": 10,
+    "success_rate": 8.0,
+    "screenshots_taken": 3,
+    "plots_generated": 0
+  },
+  "test_results": [
+    {
+      "timestamp": "01:36:37",
+      "action": "SETUP",
+      "status": "SUCCESS",
+      "details": "Chrome driver initialized",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:37",
+      "action": "TEST_01",
+      "status": "INFO",
+      "details": "Testing application startup",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:43",
+      "action": "TEST_01",
+      "status": "SUCCESS",
+      "details": "Application loaded successfully",
+      "screenshot": "001_01_application_startup.png"
+    },
+    {
+      "timestamp": "01:36:43",
+      "action": "TEST_02",
+      "status": "INFO",
+      "details": "Testing data upload functionality",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:43",
+      "action": "TEST_02",
+      "status": "FAIL",
+      "details": "Data upload failed: Message: invalid argument: File not found : /Users/qinli/Library/CloudStorage/OneDrive-CPBContractorsPtyLTD/01 Digitisation Project/Data Analysis App/testing_screenshots/Lab_summary_final.xlsx\n  (Session info: chrome=137.0.7151.120)\nStacktrace:\n0   chromedriver                        0x00000001028cdd14 cxxbridge1$str$ptr + 2735276\n1   chromedriver                        0x00000001028c5f88 cxxbridge1$str$ptr + 2703136\n2   chromedriver                        0x00000001024166f0 cxxbridge1$string$len + 90424\n3   chromedriver                        0x0000000102456c74 cxxbridge1$string$len + 353980\n4   chromedriver                        0x00000001024531b4 cxxbridge1$string$len + 338940\n5   chromedriver                        0x000000010249f0c8 cxxbridge1$string$len + 650000\n6   chromedriver                        0x0000000102451be8 cxxbridge1$string$len + 333360\n7   chromedriver                        0x0000000102891598 cxxbridge1$str$ptr + 2487600\n8   chromedriver                        0x0000000102894830 cxxbridge1$str$ptr + 2500552\n9   chromedriver                        0x0000000102871c14 cxxbridge1$str$ptr + 2358188\n10  chromedriver                        0x00000001028950b8 cxxbridge1$str$ptr + 2502736\n11  chromedriver                        0x0000000102862dec cxxbridge1$str$ptr + 2297220\n12  chromedriver                        0x00000001028b5420 cxxbridge1$str$ptr + 2634680\n13  chromedriver                        0x00000001028b55ac cxxbridge1$str$ptr + 2635076\n14  chromedriver                        0x00000001028c5bd4 cxxbridge1$str$ptr + 2702188\n15  libsystem_pthread.dylib             0x0000000187a9ac0c _pthread_start + 136\n16  libsystem_pthread.dylib             0x0000000187a95b80 thread_start + 8\n",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:43",
+      "action": "TEST_03",
+      "status": "INFO",
+      "details": "Testing Analysis Workspace navigation and tabs",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing \ud83d\udcca PSD Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find \ud83d\udcca PSD Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing \ud83e\uddea Atterberg Limits tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find \ud83e\uddea Atterberg Limits tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing \ud83d\udd28 SPT Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find \ud83d\udd28 SPT Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing \ud83d\udcaa UCS Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find \ud83d\udcaa UCS Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing \ud83c\udf0d Spatial Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find \ud83c\udf0d Spatial Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing \ud83d\udd2c Emerson Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find \ud83d\udd2c Emerson Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TEST_03",
+      "status": "FAIL",
+      "details": "Analysis tabs tested: 0/6 successful",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TEST_04",
+      "status": "INFO",
+      "details": "Testing Dashboard Gallery",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TEST_04",
+      "status": "FAIL",
+      "details": "Dashboard Gallery button not found",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TEST_05",
+      "status": "INFO",
+      "details": "Testing Export & Reporting functionality",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TEST_05",
+      "status": "FAIL",
+      "details": "Export & Reporting button not found",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TEST_06",
+      "status": "INFO",
+      "details": "Testing Single-Page Mode",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:36:46",
+      "action": "TEST_06",
+      "status": "WARNING",
+      "details": "Could not find mode selector",
+      "screenshot": null
+    }
+  ],
+  "folders": {
+    "screenshots": "testing_screenshots/E2E_TEST_20250628_013636/screenshots",
+    "output": "Output/20250628_01h"
+  }
+}

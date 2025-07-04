@@ -1,0 +1,220 @@
+{
+  "test_name": "GEOTECHNICAL_ANALYSIS_TOOL_COMPLETE_FUNCTIONAL_VERIFICATION",
+  "test_version": "v1.0",
+  "timestamp": "20250628_011329",
+  "start_time": "2025-06-28T01:13:29.821074",
+  "end_time": "2025-06-28T01:14:14.036915",
+  "duration_minutes": 0.7369307,
+  "app_url": "http://localhost:8503",
+  "test_data_file": "Lab_summary_final.xlsx",
+  "statistics": {
+    "total_operations": 28,
+    "successful_operations": 10,
+    "failed_operations": 5,
+    "success_rate": 35.714285714285715,
+    "screenshots_taken": 12,
+    "plots_generated": 0
+  },
+  "test_results": [
+    {
+      "timestamp": "01:13:30",
+      "action": "SETUP",
+      "status": "SUCCESS",
+      "details": "Chrome driver initialized",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:30",
+      "action": "TEST_01",
+      "status": "INFO",
+      "details": "Testing application startup",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:36",
+      "action": "TEST_01",
+      "status": "SUCCESS",
+      "details": "Application loaded successfully",
+      "screenshot": "001_01_application_startup.png"
+    },
+    {
+      "timestamp": "01:13:36",
+      "action": "TEST_02",
+      "status": "INFO",
+      "details": "Testing data upload functionality",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:46",
+      "action": "TEST_02",
+      "status": "SUCCESS",
+      "details": "Data uploaded: Lab_summary_final.xlsx",
+      "screenshot": "003_02_data_uploaded.png"
+    },
+    {
+      "timestamp": "01:13:46",
+      "action": "TEST_03",
+      "status": "INFO",
+      "details": "Testing Analysis Workspace navigation and tabs",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:50",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing PSD Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:50",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find PSD Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:50",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing Atterberg tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "PLOT_CHECK",
+      "status": "SUCCESS",
+      "details": "Existing plots found in Atterberg",
+      "screenshot": "005_03_tab_2_Atterberg.png"
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing SPT Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find SPT Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing UCS Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find UCS Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing Spatial Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find Spatial Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TAB_TEST",
+      "status": "INFO",
+      "details": "Testing Emerson Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TAB_TEST",
+      "status": "FAIL",
+      "details": "Could not find Emerson Analysis tab",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TEST_03",
+      "status": "SUCCESS",
+      "details": "Analysis tabs tested: 1/6 successful",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:53",
+      "action": "TEST_04",
+      "status": "INFO",
+      "details": "Testing Dashboard Gallery",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:13:59",
+      "action": "DASHBOARD",
+      "status": "SUCCESS",
+      "details": "Site Characterization dashboard has plots",
+      "screenshot": "007_04_dashboard_1_Site_Characterization.png"
+    },
+    {
+      "timestamp": "01:14:03",
+      "action": "DASHBOARD",
+      "status": "SUCCESS",
+      "details": "Material Properties dashboard has plots",
+      "screenshot": "008_04_dashboard_2_Material_Properties.png"
+    },
+    {
+      "timestamp": "01:14:06",
+      "action": "DASHBOARD",
+      "status": "SUCCESS",
+      "details": "Rock Properties dashboard has plots",
+      "screenshot": "009_04_dashboard_3_Rock_Properties.png"
+    },
+    {
+      "timestamp": "01:14:06",
+      "action": "TEST_04",
+      "status": "SUCCESS",
+      "details": "Dashboard testing completed: 3/3",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:14:06",
+      "action": "TEST_05",
+      "status": "INFO",
+      "details": "Testing Export & Reporting functionality",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:14:09",
+      "action": "TEST_05",
+      "status": "SUCCESS",
+      "details": "Export functionality available (9 export options)",
+      "screenshot": "010_05_export_page.png"
+    },
+    {
+      "timestamp": "01:14:14",
+      "action": "TEST_06",
+      "status": "INFO",
+      "details": "Testing Single-Page Mode",
+      "screenshot": null
+    },
+    {
+      "timestamp": "01:14:14",
+      "action": "TEST_06",
+      "status": "WARNING",
+      "details": "Could not find mode selector",
+      "screenshot": null
+    }
+  ],
+  "folders": {
+    "screenshots": "testing_screenshots/E2E_TEST_20250628_011329/screenshots",
+    "output": "Output/20250628_01h"
+  }
+}

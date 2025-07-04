@@ -1,0 +1,91 @@
+20250703 Modular Architect Restructure Layout
+
+Geotechnical Analysis App - Modular Structure Analysis
+Status: Code Restructuring Phase - NO functionality/UI changes allowed
+
+CURRENT MODULAR STRUCTURE ANALYSIS
+
+Well-Structured Modules (1:1 mapping)
+
+Tab                Utils Module              Functions File                      Status
+PSD                psd_analysis.py           plot_psd.py                        Perfect 1:1 mapping
+Atterberg          atterberg_analysis.py     plot_atterberg_chart.py           Perfect 1:1 mapping
+SPT                spt_analysis.py           plot_SPT_vs_depth.py              Perfect 1:1 mapping
+Emerson            emerson_analysis.py       plot_emerson_by_origin.py         Perfect 1:1 mapping
+
+Modules Needing Restructuring
+
+Tab                 Current Utils Module        Functions Files                        Issue
+UCS vs Depth       ucs_analysis.py             plot_UCS_vs_depth.py                  Good, but shares module
+UCS vs Is50        ucs_analysis.py             plot_UCS_Is50.py                      Shares module with UCS vs Depth
+Property vs Depth  spatial_analysis.py         plot_engineering_property_vs_depth.py Huge monolithic module
+Property vs Chainage spatial_analysis.py       plot_by_chainage.py                   Shares with other spatial tabs
+Thickness Analysis spatial_analysis.py         plot_category_by_thickness.py         Shares with other spatial tabs
+Histograms         comprehensive_analysis.py   plot_histogram.py                     Massive shared module
+CBR Swell / WPI    comprehensive_analysis.py   plot_CBR_swell_WPI_histogram.py       Shares with Histograms
+
+MAJOR ISSUES IDENTIFIED
+
+1. spatial_analysis.py (245KB) - Monolithic file containing 3 different tabs
+2. comprehensive_analysis.py (89KB) - Handles 2 different analysis types  
+3. ucs_analysis.py (105KB) - Contains 2 different UCS analyses
+
+RESTRUCTURING PLAN
+
+Priority 1: Break Down Monolithic Modules
+
+Split spatial_analysis.py into:
+utils/property_depth_analysis.py     -> plot_engineering_property_vs_depth.py
+utils/property_chainage_analysis.py  -> plot_by_chainage.py  
+utils/thickness_analysis.py          -> plot_category_by_thickness.py
+
+Split comprehensive_analysis.py into:
+utils/histogram_analysis.py          -> plot_histogram.py
+utils/cbr_wpi_analysis.py            -> plot_CBR_swell_WPI_histogram.py
+
+Split ucs_analysis.py into:
+utils/ucs_depth_analysis.py          -> plot_UCS_vs_depth.py
+utils/ucs_is50_analysis.py           -> plot_UCS_Is50.py
+
+Priority 2: Create Shared Utilities
+
+utils/core/
+column_detection.py      - Smart column selection logic
+data_validation.py       - Common data validation
+plot_styling.py          - Shared styling functions
+parameter_parsing.py     - Common parameter parsing
+
+IDEAL TARGET STRUCTURE
+
+Each Tab = 1 Utils Module + 1 Functions File + Shared Core
+
+BENEFITS
+- Maintainable: Each module focuses on one specific analysis
+- Testable: Individual modules can be tested in isolation  
+- Reusable: Core utilities shared across modules
+- Scalable: Easy to add new analysis types
+- Debug-friendly: Issues isolated to specific modules
+
+CURRENT FILE SIZES
+spatial_analysis.py: 245,726 bytes (245KB)
+comprehensive_analysis.py: 89,877 bytes (89KB)
+ucs_analysis.py: 105,177 bytes (105KB)
+atterberg_analysis.py: 68,400 bytes (68KB)
+psd_analysis.py: 90,913 bytes (90KB)
+spt_analysis.py: 55,671 bytes (55KB)
+emerson_analysis.py: 50,229 bytes (50KB)
+
+TAB TO RENDER FUNCTION MAPPING
+tab1: Data -> render_data_overview()
+tab2: PSD -> render_psd_analysis_tab(data)
+tab3: Atterberg -> render_atterberg_analysis_tab(data)
+tab4: SPT -> render_spt_analysis_tab(data)
+tab5: Emerson -> render_emerson_analysis_tab(data)
+tab6: UCS vs Depth -> render_ucs_depth_tab(data)
+tab7: UCS vs Is50 -> render_ucs_is50_tab(data)
+tab8: Property vs Depth -> render_property_depth_tab(data)
+tab9: Property vs Chainage -> render_property_chainage_tab(data)
+tab10: Thickness Analysis -> render_thickness_analysis_tab(data)
+tab11: Histograms -> render_comprehensive_histograms_tab(data)
+tab12: CBR Swell / WPI -> render_cbr_wpi_analysis_tab(data)
+tab13: Export -> render_batch_export_tab(data)

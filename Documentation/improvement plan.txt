@@ -1,0 +1,468 @@
+# Geotechnical Data Analysis App - Performance Optimization Plan
+ 
+## Executive Summary
+ 
+This document outlines a comprehensive performance optimization strategy for the geotechnical data analysis Streamlit application. The plan addresses critical bottlenecks and provides a phased approach to achieve significant performance improvements.
+ 
+**Expected Results:**
+- 60% reduction in initial load time
+- 80% faster tab switching
+- 75% faster plot generation
+- 50% reduction in memory usage
+ 
+## Current Architecture Overview
+ 
+### Strengths
+- ✅ Well-organized modular structure with separate `Functions/` and `utils/` directories
+- ✅ Good separation of plotting functions and data processing utilities
+- ✅ Comprehensive authentication and session state management
+- ✅ Professional geotechnical analysis capabilities
+ 
+### Performance Issues Identified
+ 
+#### 1. Monolithic Main Application (Critical)
+- `main_app.py` is 820+ lines handling everything
+- All 13 tabs are initialized upfront even when unused
+- No lazy loading of tab content
+ 
+#### 2. Heavy Plotting Functions (High Impact)
+- Individual Functions files like `plot_atterberg_chart.py` are 500+ lines
+- Extensive parameter validation repeated in each function
+- Complex matplotlib figure management in `plotting_utils.py`
+- No plot result caching
+ 
+ 
+#### 3. Inefficient Data Processing (Medium Impact)
+- Same filtering operations repeated across tabs
+- Limited use of `@st.cache_data` (only 2-3 functions currently cached)
+- No preprocessing optimization
+ 
+#### 4. Session State Overuse (Medium Impact)
+- Storing large plot objects in memory
+- No cleanup of unused session data
+- Multiple plot storage dictionaries
+ 
+## Optimization Recommendations
+ 
+### Phase 1: Immediate Performance Gains (High ROI)
+ 
+#### 1.1 Implement Lazy Tab Loading
+**Problem:** All 13 tabs are loaded simultaneously, causing unnecessary overhead.
+ 
+**Solution:**
+```python
+# Replace current all-tabs-at-once approach with:
+selected_tab = st.selectbox("Analysis Type", [
+    "Data Overview", "PSD Analysis", "Atterberg",
+    "SPT", "Emerson", "UCS vs Depth", "UCS vs Is50",
+    "Property vs Depth", "Property vs Chainage",
+    "Thickness Analysis", "Histograms", "CBR Swell / WPI", "Export"
+])
+ 
+if selected_tab == "Data Overview":
+    render_data_overview()
+elif selected_tab == "PSD Analysis":
+    render_psd_analysis_tab(data)
+elif selected_tab == "Atterberg":
+    render_atterberg_analysis_tab(data)
+# Only load active tab
+```
+ 
+**Expected Impact:** 60% reduction in initial load time
+ 
+#### 1.2 Expand Caching Strategy
+**Problem:** Limited use of Streamlit's caching capabilities.
+ 
+**Solution:**
+```python
+@st.cache_data(ttl=3600)  # Cache for 1 hour
+def process_filtered_data(data_hash, filters_hash):
+    """Cache filtered data results"""
+    return apply_global_filters(data, filters)
+ 
+@st.cache_data(ttl=7200)  # Cache for 2 hours  
+def generate_plot_data(test_type, data_hash):
+    """Cache plot-ready data"""
+    return extract_test_data(data, test_type)
+ 
+@st.cache_data(ttl=1800)  # Cache for 30 minutes
+def calculate_statistics(data_hash):
+    """Cache statistical calculations"""
+    return compute_test_statistics(data)
+```
+ 
+**Files to modify:**
+- `utils/data_processing.py` - Add caching to all major functions
+- `utils/atterberg_analysis.py` - Cache data extraction
+- `utils/psd_analysis.py` - Cache PSD data processing
+- `utils/spt_analysis.py` - Cache SPT data processing
+ 
+**Expected Impact:** 50% reduction in data processing time
+ 
+#### 1.3 Optimize Data Filtering
+**Problem:** Redundant filtering operations across different tabs.
+ 
+**Solution:**
+```python
+@st.cache_data
+def apply_all_filters(data, depth_range, chainage_range, geology_list, consistency_list):
+    """Single comprehensive filter operation"""
+    filtered_data = data.copy()
+    
+    # Apply all filters in one operation
+    if depth_range:
+        filtered_data = filtered_data[
+            (filtered_data['From_mbgl'] >= depth_range[0]) &
+            (filtered_data['From_mbgl'] <= depth_range[1])
+        ]
+    
+    if chainage_range:
+        filtered_data = filtered_data[
+            (filtered_data['Chainage'] >= chainage_range[0]) &
+            (filtered_data['Chainage'] <= chainage_range[1])
+        ]
+    
+    return filtered_data
+```
+ 
+**Expected Impact:** 30% faster filter operations
+ 
+### Phase 2: Structural Improvements (Medium ROI)
+ 
+#### 2.1 Split Main App into Modules
+**Problem:** `main_app.py` is too large and handles too many responsibilities.
+ 
+**New Structure:**
+```
+├── main_app.py (authentication + routing only ~100 lines)
+├── ui/
+│   ├── __init__.py
+│   ├── header.py
+│   ├── sidebar.py
+│   ├── components/
+│   │   ├── data_upload.py
+│   │   ├── filters.py
+│   │   └── plot_controls.py
+│   └── tabs/
+│       ├── __init__.py
+│       ├── data_overview.py
+│       ├── psd_analysis.py
+│       ├── atterberg_analysis.py
+│       ├── spt_analysis.py
+│       ├── ucs_analysis.py
+│       ├── emerson_analysis.py
+│       ├── spatial_analysis.py
+│       ├── comprehensive_analysis.py
+│       └── batch_export.py
+├── core/
+│   ├── __init__.py
+│   ├── cache_manager.py
+│   ├── data_pipeline.py
+│   └── plot_factory.py
+```
+ 
+**Implementation Steps:**
+1. Create `ui/` and `core/` directories
+2. Extract tab rendering functions to separate modules
+3. Create centralized routing in simplified `main_app.py`
+4. Implement lazy loading for each tab module
+ 
+#### 2.2 Create Plot Factory Pattern
+**Problem:** Redundant plot creation code and no centralized caching.
+ 
+**Solution:**
+```python
+# core/plot_factory.py
+class PlotFactory:
+    @staticmethod
+    @st.cache_data
+    def create_plot(plot_type: str, data_hash: str, **params):
+        """Centralized plot creation with caching"""
+        
+        plot_configs = {
+            'atterberg': {
+                'function': plot_atterberg_chart,
+                'required_columns': ['LL (%)', 'PI (%)', 'Geology_Orgin']
+            },
+            'psd': {
+                'function': plot_psd,
+                'required_columns': ['Hole_ID', 'sieve_sizes']
+            },
+            'spt_cohesive': {
+                'function': plot_SPT_vs_depth_cohesive,
+                'required_columns': ['SPT N Value', 'From_mbgl', 'Type']
+            }
+        }
+        
+        config = plot_configs.get(plot_type)
+        if config:
+            return config['function'](**params)
+        
+    @staticmethod
+    def validate_data(data, required_columns):
+        """Validate data has required columns"""
+        missing = [col for col in required_columns if col not in data.columns]
+        return len(missing) == 0, missing
+```
+ 
+#### 2.3 Implement Data Preprocessing Pipeline
+**Problem:** Repeated data validation and type conversion operations.
+ 
+**Solution:**
+```python
+# core/data_pipeline.py
+@st.cache_data
+def preprocess_lab_data(raw_data):
+    """One-time preprocessing: validation, type conversion, indexing"""
+    processed_data = raw_data.copy()
+    
+    # Type conversions
+    numeric_columns = get_numerical_properties_smart(processed_data)
+    for col in numeric_columns:
+        processed_data[col] = pd.to_numeric(processed_data[col], errors='coerce')
+    
+    # Create indices for faster filtering
+    if 'Chainage' in processed_data.columns:
+        processed_data = processed_data.sort_values('Chainage')
+    
+    return processed_data
+ 
+@st.cache_data  
+def extract_test_data(preprocessed_data, test_type):
+    """Cached test-specific data extraction"""
+    test_col = f"{test_type}?"
+    if test_col in preprocessed_data.columns:
+        return preprocessed_data[preprocessed_data[test_col] == 'Y']
+    return pd.DataFrame()
+```
+ 
+### Phase 3: Advanced Optimizations (Lower ROI, Long-term)
+ 
+#### 3.1 Async Plot Generation
+**Problem:** Sequential plot generation blocks UI.
+ 
+**Solution:**
+```python
+import asyncio
+import concurrent.futures
+ 
+async def generate_plots_async(plot_configs):
+    """Generate multiple plots concurrently"""
+    loop = asyncio.get_event_loop()
+    
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        tasks = []
+        for config in plot_configs:
+            task = loop.run_in_executor(
+                executor,
+                PlotFactory.create_plot,
+                config['type'],
+                config['data_hash'],
+                **config['params']
+            )
+            tasks.append(task)
+        
+        results = await asyncio.gather(*tasks)
+        return results
+```
+ 
+#### 3.2 Progressive Loading
+**Problem:** Users wait for complete plot generation.
+ 
+**Solution:**
+```python
+def render_plot_with_progress(plot_function, *args, **kwargs):
+    """Show progress while generating plots"""
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+    
+    with st.empty():
+        status_text.text("Preparing data...")
+        progress_bar.progress(25)
+        
+        data = prepare_plot_data(*args)
+        progress_bar.progress(50)
+        
+        status_text.text("Generating plot...")
+        plot_result = plot_function(data, **kwargs)
+        progress_bar.progress(75)
+        
+        status_text.text("Rendering...")
+        display_plot(plot_result)
+        progress_bar.progress(100)
+        
+        # Clear progress indicators
+        progress_bar.empty()
+        status_text.empty()
+```
+ 
+#### 3.3 Memory Management
+**Problem:** Unlimited growth of session state data.
+ 
+**Solution:**
+```python
+# core/cache_manager.py
+class SessionStateManager:
+    MAX_PLOTS = 10
+    MAX_DATA_CACHE = 5
+    
+    @staticmethod
+    def cleanup_old_plots():
+        """Remove oldest plots when limit exceeded"""
+        if 'plot_cache' not in st.session_state:
+            st.session_state.plot_cache = {}
+        
+        if len(st.session_state.plot_cache) > SessionStateManager.MAX_PLOTS:
+            # Remove oldest entries
+            sorted_items = sorted(
+                st.session_state.plot_cache.items(),
+                key=lambda x: x[1].get('timestamp', 0)
+            )
+            
+            for key, _ in sorted_items[:-SessionStateManager.MAX_PLOTS]:
+                del st.session_state.plot_cache[key]
+    
+    @staticmethod
+    def store_plot(key, plot_data):
+        """Store plot with timestamp and cleanup"""
+        if 'plot_cache' not in st.session_state:
+            st.session_state.plot_cache = {}
+        
+        st.session_state.plot_cache[key] = {
+            'data': plot_data,
+            'timestamp': time.time()
+        }
+        
+        SessionStateManager.cleanup_old_plots()
+```
+ 
+## Implementation Timeline
+ 
+### Week 1: Quick Wins (~40% performance improvement)
+**Estimated effort: 14 hours**
+ 
+#### Day 1-2: Lazy Tab Loading (4 hours)
+- [ ] Replace `st.tabs()` with `st.selectbox()`
+- [ ] Implement conditional tab rendering
+- [ ] Test tab switching performance
+ 
+#### Day 3-4: Expand Caching (6 hours)
+- [ ] Add `@st.cache_data` to data processing functions
+- [ ] Cache filtered data operations
+- [ ] Cache test availability calculations
+- [ ] Cache statistical computations
+ 
+#### Day 5: Optimize Filters (4 hours)
+- [ ] Create single comprehensive filter function
+- [ ] Implement filter result caching
+- [ ] Test filter performance
+ 
+### Week 2: Structural Changes (~25% additional improvement)
+**Estimated effort: 26 hours**
+ 
+#### Day 1-2: Split Main App (12 hours)
+- [ ] Create `ui/` and `core/` directory structure
+- [ ] Extract tab functions to separate modules
+- [ ] Implement module-based routing
+- [ ] Test modular architecture
+ 
+#### Day 3-4: Plot Factory Pattern (8 hours)
+- [ ] Create `PlotFactory` class
+- [ ] Implement centralized plot caching
+- [ ] Add plot validation logic
+- [ ] Test plot generation performance
+ 
+#### Day 5: Preprocessing Pipeline (6 hours)
+- [ ] Create `DataPipeline` class
+- [ ] Implement one-time preprocessing
+- [ ] Add data indexing for faster queries
+- [ ] Test data processing performance
+ 
+### Week 3+: Advanced Features (~15% additional improvement)
+**Estimated effort: 36 hours**
+ 
+#### Days 1-3: Async Plot Generation (16 hours)
+- [ ] Implement async plot generation
+- [ ] Add concurrent execution support
+- [ ] Test async performance benefits
+ 
+#### Days 4-5: Progressive Loading (8 hours)
+- [ ] Create progress indicators
+- [ ] Implement incremental plot rendering
+- [ ] Add user feedback mechanisms
+ 
+#### Days 6-7: Memory Management (12 hours)
+- [ ] Implement LRU cache for plots
+- [ ] Add automatic cleanup routines
+- [ ] Monitor memory usage patterns
+ 
+## Success Metrics
+ 
+### Before Optimization (Baseline)
+- **Initial load time:** 8-12 seconds
+- **Tab switching:** 3-5 seconds  
+- **Plot generation:** 2-4 seconds each
+- **Memory usage:** 150-300MB
+- **User experience:** Multiple loading delays
+ 
+### After Phase 1 (Target)
+- **Initial load time:** 3-5 seconds (60% improvement)
+- **Tab switching:** 0.5-1 seconds (80% improvement)
+- **Plot generation:** 0.5-1 seconds (75% improvement)
+- **Memory usage:** 80-150MB (50% improvement)
+- **User experience:** Smooth, responsive interface
+ 
+### After All Phases (Ultimate Target)
+- **Initial load time:** 2-3 seconds (75% improvement)
+- **Tab switching:** <0.5 seconds (90% improvement)
+- **Plot generation:** <0.5 seconds (85% improvement)
+- **Memory usage:** 60-100MB (70% improvement)
+- **User experience:** Near-instant responsiveness
+ 
+## Risk Assessment
+ 
+### Low Risk Changes
+- ✅ Adding caching decorators
+- ✅ Implementing lazy loading
+- ✅ Optimizing filter operations
+ 
+### Medium Risk Changes
+- ⚠️ Splitting main application file
+- ⚠️ Implementing plot factory pattern
+- ⚠️ Data preprocessing pipeline
+ 
+### High Risk Changes
+- ❗ Async plot generation
+- ❗ Major architectural changes
+- ❗ Memory management system
+ 
+## Rollback Strategy
+ 
+1. **Git branching:** Create feature branches for each phase
+2. **Incremental deployment:** Test each optimization individually
+3. **Performance monitoring:** Track metrics before and after each change
+4. **User feedback:** Gather feedback on each major change
+5. **Backup plan:** Keep current stable version available
+ 
+## Monitoring and Maintenance
+ 
+### Performance Monitoring
+- [ ] Implement performance logging
+- [ ] Track cache hit rates
+- [ ] Monitor memory usage patterns
+- [ ] Measure user interaction times
+ 
+### Ongoing Maintenance
+- [ ] Regular cache cleanup
+- [ ] Performance metric reviews
+- [ ] User experience assessments
+- [ ] Optimization fine-tuning
+ 
+## Conclusion
+ 
+This performance optimization plan provides a structured approach to significantly improve the geotechnical data analysis application's performance. By implementing the changes in phases, we can achieve substantial improvements while minimizing risks and maintaining application stability.
+ 
+The prioritized approach ensures that the highest-impact optimizations are implemented first, providing immediate benefits to users while laying the foundation for more advanced improvements in later phases.
+ 
+**Total expected improvement:** 75% faster loading, 90% faster interactions, 70% less memory usage.
+ 
